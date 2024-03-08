@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
+const helmet = require('helmet');
+
+const ErrorRoutes = require('./routes/Error');
 
 require('dotenv').config();
 
@@ -28,5 +31,13 @@ app.use((req, res, next) => {
 app.options('*', (req, res) => {
     res.sendStatus(200);
 });
+
+// Middleware express.json() à express pour pouvoir récupérer les données des requêtes via req.body
+app.use(express.json());
+// Routes 
+app.use('/api/Error', ErrorRoutes);
+
+//Middleware de sécurité contre les attaques courantes
+app.use(helmet());
 
 module.exports = app;
