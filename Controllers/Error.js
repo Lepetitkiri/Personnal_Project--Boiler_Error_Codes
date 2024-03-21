@@ -10,7 +10,8 @@ require("dotenv").config();
 // Récupértion d'un code erreur spécifique - all users 
 exports.getOneError = (req, res, next) => {
 
-    SaunierDuval.findOne({ model: req.body.model, errorCode: req.body.errorCode })
+    SaunierDuval.findOne({ model: req.body.model, 'errorCodes': { $elemMatch: { errorName: req.body.errorName } } },
+        { 'errorCodes.$': 1 }) // Projection pour renvoyer uniquement le premier élément correspondant de l'array errorCodes
         .then((errorData) => {
             if (!errorData) {
                 return res.status(404).json({
